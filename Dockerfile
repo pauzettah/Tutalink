@@ -1,7 +1,7 @@
 FROM php:8.2-apache
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libcurl4-openssl-dev libonig-dev \
+    && apt-get install -y --no-install-recommends libonig-dev \
     && docker-php-ext-install -j"$(nproc)" mbstring pdo_mysql \
     && a2enmod rewrite \
     && printf '%s\n' \
