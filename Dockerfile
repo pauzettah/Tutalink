@@ -1,11 +1,10 @@
 FROM php:8.2-apache
 
-# Install the helper script for clean extension installation
+# Use a specialized script to install extensions, avoiding compilation of PHP full source tree
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions
 
-# Install only the required extensions (mbstring, pdo_mysql)
-# This avoids recompiling curl and triggering the internal warnings
+# Only install the required extensions; curl is already built-in, no need to touch it
 RUN install-php-extensions mbstring pdo_mysql \
     && a2enmod rewrite \
     && printf '%s\n' \
