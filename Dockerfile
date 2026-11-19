@@ -1,8 +1,12 @@
 FROM php:8.2-apache
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libonig-dev \
-    && docker-php-ext-install -j"$(nproc)" mbstring pdo_mysql \
+# Install the helper script for clean extension installation
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions
+
+# Install only the required extensions (mbstring, pdo_mysql)
+# This avoids recompiling curl and triggering the internal warnings
+RUN install-php-extensions mbstring pdo_mysql \
     && a2enmod rewrite \
     && printf '%s\n' \
         '<Directory /var/www/html>' \
